@@ -42,6 +42,22 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# =========================
+# Generated and Node Files
+# =========================
+
+# test coverage
+gen_test_coverage
+
+# docs
+gen_doc
+
+# build files
+gen_build
+
+# release
+gen_release
+
 # node modules
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 node_modules

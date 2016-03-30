@@ -1,2 +1,2 @@
 # chartfiddle
-An online playground for your JavaScript Charting
+An online playground for JavaScript Charting

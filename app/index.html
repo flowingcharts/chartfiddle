@@ -1,0 +1,32 @@
+<!-- build:template 
+<%= banner %> 
+/build -->
+<!doctype html>
+<html lang="">
+    <head>
+        <title>ChartFiddle</title>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="keywords" content="chartfiddle, charts, javascript charts, ajax charts, plots, line charts, bar charts, pie charts, javascript plots, ajax plots">
+        <meta name="description" content="ChartFiddle - An online playground for JavaScript Charting.">
+        <!-- build:remove 
+        <script src="http://localhost:35729/livereload.js"></script>
+        /build -->
+    </head>
+    <body>
+        <div id="container"></div>
+        <!-- build:js ./js/react-0.14.7/build/react.min.js -->
+        <script src="./js/react-0.14.7/build/react.js"></script>
+        <!-- /build -->
+        <!-- build:js ./js/react-0.14.7/build/react-dom.min.js -->
+        <script src="./js/react-0.14.7/build/react-dom.js"></script>
+        <!-- /build -->
+        <!-- build:js ./js/flowingcharts-0.1.0/flowingcharts.js -->
+        <script src="./js/flowingcharts-0.1.0/flowingcharts.src.js"></script>
+        <!-- /build -->
+        <!-- build:js ./js/chartfiddle-0.1.0/chartfiddle.js -->
+        <script src="../gen_build/chartfiddle.debug.js"></script>
+        <!-- /build -->
+    </body>
+</html>
