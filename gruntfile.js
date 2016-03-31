@@ -119,6 +119,13 @@ module.exports = function (grunt)
                         cwd: 'gen_doc/',
                         src: '**/*',
                         dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/doc/'
+                    },
+                    // default.css
+                    {
+                        expand: true,   
+                        cwd: 'src/', 
+                        src: ['default.css'],
+                        dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/',
                     }
                 ]
             },
