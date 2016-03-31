@@ -34,14 +34,14 @@ module.exports = function (grunt)
         },
         // Remove console statements, debugger and specific blocks of code.
         // Removes blocks of code surrounded by //<validation>...//</validation>
-        // Generates 'gen_build/<%= pkg.name %>.src.js' from 'gen_build/<%= pkg.name %>.debug.js'.
+        // Generates 'gen_build/<%= pkg.name %>.js' from 'gen_build/<%= pkg.name %>.src.js'.
         groundskeeper: 
         {
             compile: 
             {
                 files: 
                 {
-                    'gen_build/<%= pkg.name %>.src.js': 'gen_build/<%= pkg.name %>.debug.js', // 1:1 compile
+                    'gen_build/<%= pkg.name %>.js': 'gen_build/<%= pkg.name %>.src.js', // 1:1 compile
                 }
             }
         },
@@ -70,7 +70,7 @@ module.exports = function (grunt)
             {
                 files: 
                 {
-                    'gen_build/<%= pkg.name %>.js': ['gen_build/<%= pkg.name %>.src.js']
+                    'gen_build/<%= pkg.name %>.js': ['gen_build/<%= pkg.name %>.js']
                 }
             }
         },
@@ -187,8 +187,8 @@ module.exports = function (grunt)
             }
         },
         // Browserify bundles up all of the project dependencies into a single JavaScript file.
-        // Generates a bundled file 'gen_build/<%= pkg.name %>.debug.js' from the starting point 'src/main.js'.
-        // Adds a banner displaying the project name, version and date to 'gen_build/<%= pkg.name %>.debug.js'.
+        // Generates a bundled file 'gen_build/<%= pkg.name %>.src.js' from the starting point 'src/main.js'.
+        // Adds a banner displaying the project name, version and date to 'gen_build/<%= pkg.name %>.src.js'.
         browserify: 
         {
             build: 
@@ -198,22 +198,19 @@ module.exports = function (grunt)
                     banner: '/*! <%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
                     browserifyOptions: 
                     {
-                        // Generates inline source maps as a comment at the bottom of 'gen_build/<%= pkg.name %>.debug.js' 
+                        // Generates inline source maps as a comment at the bottom of 'gen_build/<%= pkg.name %>.src.js' 
                         // to enable debugging of original JavaScript module files.
                         debug: true
                     },
                     transform: [['babelify', {presets: ['react']}]] // Convert jsx to js. 
                 },        
                 src: ['src/main.js'],
-                dest: 'gen_build/<%= pkg.name %>.debug.js'
+                dest: 'gen_build/<%= pkg.name %>.src.js'
             }
         },
         // Processes and copies the demo files 'examples/', to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/examples/'.
         // Adds a banner to each file displaying the project name, version and date.
-        // Replaces 
-        // <script type="text/javascript" src="../../gen_build/<%= pkg.name %>.debug.js"></script>
-        // with
-        // <script type="text/javascript" src="../../<%= pkg.name %>.js"></script>
+        // Replaces javascript source paths in html files from dev to release.
         processhtml: 
         {
             options:
