@@ -7,7 +7,7 @@ module.exports = function (grunt)
         // We can use properties of this file in our code eg <%= pkg.name %> <%= pkg.version %>.
         pkg: grunt.file.readJSON('package.json'),
 
-        // Concatenates and bundles the JavaScript module files in 'src/' into 'gen_build/<%= pkg.name %>.src.js'.
+        // Concatenates and bundles the JavaScript module files in 'src/js/' into 'gen_build/<%= pkg.name %>.src.js'.
         // Adds a banner displaying the project name, version and date to 'gen_build/<%= pkg.name %>.src.js'.
         concat: 
         {
@@ -19,18 +19,18 @@ module.exports = function (grunt)
             {
                 src: 
                 [
-                    'src/**/*.js'
+                    'src/js/**/*.js'
                 ],
                 dest: 'gen_build/<%= pkg.name %>.src.js'
             }
         },
         // Detects errors and potential problems in the JavaScript module and test files.
         // 'gruntfile.js' This file.
-        // 'src/**/*.js' The JavaScript module files.
-        // 'test/**/*.js' The JavaScript test files.
+        // 'src/js/**/*.js' The JavaScript module files.
+        // 'test/js/**/*.js' The JavaScript test files.
         jshint: 
         {
-            all: ['gruntfile.js', 'src/**/*.js', 'test/**/*.js']
+            all: ['gruntfile.js', 'src/js/**/*.js', 'test/js/**/*.js']
         },
         // Remove console statements, debugger and specific blocks of code.
         // Removes blocks of code surrounded by //<validation>...//</validation>
@@ -106,10 +106,10 @@ module.exports = function (grunt)
                         ], 
                         dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/js/<%= pkg.name %>-<%= pkg.version %>/'
                     },
-                    // Copies the JavaScript library files 'app/js/', to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/js/'.
+                    // Copies the JavaScript library files 'lib/', to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/js/'.
                     {
                         expand: true,
-                        cwd: 'app/js/', // Makes the src relative to cwd so that the full file path is not copied into release.    
+                        cwd: 'lib/', // Makes the src relative to cwd so that the full file path is not copied into release.    
                         src: '**/*',
                         dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/js/'
                     },
@@ -122,41 +122,41 @@ module.exports = function (grunt)
                     }
                 ]
             },
-            // Copies the JavaScript test files 'test/' to 'gen_test_coverage/test/' for testing coverage.
+            // Copies the JavaScript test files 'test/js/' to 'gen_test_coverage/test/js/' for testing coverage.
             coverage: 
             {
                 files: 
                 [
                     {
                         expand: true,
-                        cwd: 'test/',
+                        cwd: 'test/js/',
                         src: '**/*',
-                        dest: 'gen_test_coverage/test/'
+                        dest: 'gen_test_coverage/test/js/'
                     }
                 ]
             }
         },
         // Used for test coverage alongside mochaTest.
-        // Copies the JavaScript module files 'src/' to 'gen_test_coverage/src/' for testing coverage.
+        // Copies the JavaScript module files 'src/js/' to 'gen_test_coverage/src/js/' for testing coverage.
         blanket: 
         {
             coverage: 
             {
-                src: ['src/'],
-                dest: 'gen_test_coverage/src/'
+                src: ['src/js/'],
+                dest: 'gen_test_coverage/src/js/'
             }
         },   
         // Unit testing.
         mochaTest: 
         {
-            // Runs unit tests 'gen_test_coverage/test/' on the JavaScript module files in 'gen_test_coverage/src/'.
+            // Runs unit tests 'gen_test_coverage/test/js/' on the JavaScript module files in 'gen_test_coverage/src/js/'.
             test: 
             {
                 options: 
                 {
                     reporter: 'spec',
                 },
-                src: ['gen_test_coverage/test/**/*.js']
+                src: ['gen_test_coverage/test/js/**/*.js']
             },
             // Creates a test coverage file 'gen_test_coverage/coverage.html'.
             // This file helps highlight areas where more testing is required.
@@ -168,16 +168,16 @@ module.exports = function (grunt)
                     quiet: true,
                     captureFile: 'gen_test_coverage/coverage.html'
                 },
-                src: ['gen_test_coverage/test/**/*.js']
+                src: ['gen_test_coverage/test/js/**/*.js']
             }
         },
-        // Generates documentation for the JavaScript module files 'src/**/*.js' in 'gen_doc'.
+        // Generates documentation for the JavaScript module files 'src/js/**/*.js' in 'gen_doc'.
         // Uses template and config files from ink-docstrap.
         jsdoc: 
         {
             doc: 
             {
-                src: ['src/**/*.js'],
+                src: ['src/js/**/*.js'],
                 options: 
                 {
                     destination: 'gen_doc',
@@ -187,7 +187,7 @@ module.exports = function (grunt)
             }
         },
         // Browserify bundles up all of the project dependencies into a single JavaScript file.
-        // Generates a bundled file 'gen_build/<%= pkg.name %>.src.js' from the starting point 'src/main.js'.
+        // Generates a bundled file 'gen_build/<%= pkg.name %>.src.js' from the starting point 'src/js/main.js'.
         // Adds a banner displaying the project name, version and date to 'gen_build/<%= pkg.name %>.src.js'.
         browserify: 
         {
@@ -204,7 +204,7 @@ module.exports = function (grunt)
                     },
                     transform: [['babelify', {presets: ['react']}]] // Convert jsx to js. 
                 },        
-                src: ['src/main.js'],
+                src: ['src/js/main.js'],
                 dest: 'gen_build/<%= pkg.name %>.src.js'
             }
         },
@@ -226,7 +226,7 @@ module.exports = function (grunt)
                 [
                     {
                         expand: true,   
-                        cwd: 'app/', 
+                        cwd: 'src/', 
                         src: ['index.html'],
                         dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/',
                         ext: '.html'
@@ -239,7 +239,7 @@ module.exports = function (grunt)
         {
             all: 
             {
-                src: ['gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
+                src: ['gruntfile.js', 'src/js/**/*.js', 'test/js/**/*.js'],
                 options: 
                 {
                     verbose: false,
@@ -284,7 +284,7 @@ module.exports = function (grunt)
         {
             dev : 
             {
-                path: 'file:///C:/Work/GitHub/<%= pkg.name %>/app/index.html',
+                path: 'file:///C:/Work/GitHub/<%= pkg.name %>/src/index.html',
                 app: 'Chrome'
             },
             release : 
@@ -293,14 +293,14 @@ module.exports = function (grunt)
                 app: 'Chrome'
             }
         },
-        // '>grunt watch' Runs the 'build' task if changes are made to the JavaScript source files 'src/**/*.js'.
+        // '>grunt watch' Runs the 'build' task if changes are made to the JavaScript source files 'src/js/**/*.js'.
         // Enable by typing '>grunt watch' into a command prompt.
         watch:
         {
             // livereload reloads any html pages that contain <script src="http://localhost:35729/livereload.js"></script>
             // see http://stackoverflow.com/a/16430183
             options: { livereload: true },
-            files: ['src/**/*.js'],
+            files: ['src/js/**/*.js'],
             tasks: ['build']
         }
     });
@@ -325,7 +325,7 @@ module.exports = function (grunt)
     // Tasks that can be run from the command line.
     // Open command prompt in this directory (shift + right click > Open command window here) to run tasks.
 
-    // '>grunt watch' Runs the 'build' task if changes are made to the JavaScript source files 'src/**/*.js'.
+    // '>grunt watch' Runs the 'build' task if changes are made to the JavaScript source files 'src/js/**/*.js'.
 
     // '>grunt todos' Extracts and lists TODOs and FIXMEs from code.
 
