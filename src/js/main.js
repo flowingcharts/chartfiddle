@@ -273,3 +273,90 @@ ReactDOM.render(
   <FilterableProductTable products={PRODUCTS} />,
   document.getElementById('container')
 );
+
+
+
+var controls =
+[
+    {id: 'viewportMargin', name: 'Viewport Margin', description: 'Margin around the viewport edge that the tip isnt allowed to overlap', value: 10, type: 'string'},
+    {id: 'position', name: 'Position', description: 'The preferred position of the data tip relative to the x and y coords - one of top, bottom, left or right', value: 'top', type: 'string', choices: ['top', 'bottom', 'left', 'right']},
+    {id: 'padding', name: 'Padding', description: 'Padding', value: 7, type: 'integer'},
+    {id: 'fontFamily', name: 'Font Family', description: 'Font family', value: 'arial', type: 'string', choices: ['Arial', 'Helvetica', 'sans-serif']},
+    {id: 'fontSize', name: 'Font Size', description: 'Font size', value: 12, type: 'integer'},
+    {id: 'fontColor', name: 'Font Color', description: 'Font color', value: '#666666', type: 'color'},
+    {id: 'backgroundColor', name: 'Background Color', description: 'Background color', value: '#fafafa', type: 'color'},
+    {id: 'borderStyle', name: 'Border Style', description: 'Border style', value: 'solid', type: 'string', choices: ['dotted', 'dashed','solid', 'double', 'groove', 'ridge', 'inset', 'outset']},
+    {id: 'borderColor', name: 'Border Color', description: 'Border color', value: '#666666', type: 'color'},
+    {id: 'borderWidth', name: 'Border Width', description: 'Border width', value: 1, type: 'integer'},
+    {id: 'borderRadius', name: 'Border Radius', description: 'Border radius', value: 2, type: 'integer'},
+    {id: 'shadowSize', name: 'Shadow Size', description: 'Shadow size', value: 1, type: 'integer'},
+    {id: 'hideShadow', name: 'Hide Shadow', description: 'Hide shadow', value: false, type: 'boolean'},
+    {id: 'notchSize', name: 'Notch Size', description: 'Notch size', value: 8, type: 'integer'},
+    {id: 'notchPadding', name: 'Notch Padding', description: 'Padding between notch and edge of tip', value: 5, type: 'string'},
+    {id: 'hideNotch', name: 'Hide Notch', description: 'Hide notch', value: false, type: 'boolean'},
+    {id: 'followMouse', name: 'Follow Mouse', description: 'Should the tip follow the mouse', value: false, type: 'boolean'},
+    {id: 'useAnimation', name: 'Use Animation', description: 'Should the tip movement be animated', value: true, type: 'boolean'},
+    {id: 'speed', name: 'Animation Speed', description: 'The speed of the animation. A value between 0 and 1 that controls the speed of the animation', value: 0.01, type: 'float', min: 0, max: 1},
+    {id: 'speedIncr', name: 'Animation Speed Increment', description: 'Increases the animation speed so that it remains more constant and smooth as gaps between start and end points get smaller', value: 0.05, type: 'float'},
+    {id: 'snapDistance', name: 'Snap Distance', description: 'The distance away from a given xy position at which the tip will snap to a point', value: 5, type: 'integer'}
+];
+
+
+var PropertiesFormRow = React.createClass(
+{
+    render: function() 
+    {
+        return (
+            <tr>
+                <td>{this.props.id}</td>
+                <td>{this.props.name}</td>
+                <td>{this.props.description}</td>
+                <td>{this.props.value}</td>
+                <td>{this.props.type}</td>
+            </tr>
+        );
+    }
+});
+
+var PropertiesFormTable = React.createClass(
+{
+    render: function() 
+    {
+        var rows = [];
+        this.props.controls.forEach(
+        function(control) 
+        {
+            rows.push(<PropertiesFormRow id={control.id} name={control.name} description={control.description} value={control.value} type={control.type} />);
+        }
+        .bind(this));
+
+        return (
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Value</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+            </table>
+        );
+    }
+});
+
+var PropertiesForm = React.createClass(
+{
+    render: function() 
+    {
+        return (
+            <div>
+                <PropertiesFormTable controls={this.props.controls} />
+            </div>
+        );
+    }
+});
+
+ReactDOM.render(<PropertiesForm controls={controls} />, document.getElementById('container2'));
