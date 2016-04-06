@@ -11,7 +11,12 @@
         <meta name="keywords" content="chartfiddle, charts, javascript charts, ajax charts, plots, line charts, bar charts, pie charts, javascript plots, ajax plots">
         <meta name="description" content="ChartFiddle - An online playground for JavaScript Charting.">
 
-        <link rel="stylesheet" type="text/css" href="default.css">
+        <!-- build:css ./lib/bootstrap-3.3.6-dist/css/bootstrap.min.css -->
+        <link rel="stylesheet" type="text/css" href="../lib/bootstrap-3.3.6-dist/css/bootstrap.css"  />
+        <!-- /build -->
+        <!-- build:css ./css/chartfiddle.min.css -->
+        <link rel="stylesheet" type="text/css" href="./css/chartfiddle.css">
+        <!-- /build -->
 
         <!-- build:remove 
         <script src="http://localhost:35729/livereload.js"></script>
@@ -19,18 +24,20 @@
     </head>
     <body>
         <div id="container"></div>
-        <div id="container2"></div>
-        <!-- build:js ./js/react-0.14.8/build/react.min.js -->
+        <!-- build:js ./lib/bootstrap-3.3.6-dist/bootstrap/bootstrap.min.js -->
+        <script src="../lib/bootstrap-3.3.6-dist/bootstrap/bootstrap.js"></script>
+        <!-- /build -->
+        <!-- build:js ./lib/react-0.14.8/build/react.min.js -->
         <script src="../lib/react-0.14.8/build/react.js"></script>
         <!-- /build -->
-        <!-- build:js ./js/react-0.14.8/build/react-dom.min.js -->
+        <!-- build:js ./lib/react-0.14.8/build/react-dom.min.js -->
         <script src="../lib/react-0.14.8/build/react-dom.js"></script>
         <!-- /build -->
-        <!-- build:js ./js/flowingcharts-0.1.0/flowingcharts.js -->
-        <script src="../lib/flowingcharts-0.1.0/flowingcharts.src.js"></script>
+        <!-- build:js ./lib/flowingcharts-0.1.0/flowingcharts.min.js -->
+        <script src="../lib/flowingcharts-0.1.0/flowingcharts.js"></script>
         <!-- /build -->
-        <!-- build:js ./js/chartfiddle-0.1.0/chartfiddle.js -->
-        <script src="../gen_build/chartfiddle.src.js"></script>
+        <!-- build:js ./js/chartfiddle.min.js -->
+        <script src="../gen_build/chartfiddle.js"></script>
         <!-- /build -->
     </body>
 </html>

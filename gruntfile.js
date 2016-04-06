@@ -7,8 +7,8 @@ module.exports = function (grunt)
         // We can use properties of this file in our code eg <%= pkg.name %> <%= pkg.version %>.
         pkg: grunt.file.readJSON('package.json'),
 
-        // Concatenates and bundles the JavaScript module files in 'src/js/' into 'gen_build/<%= pkg.name %>.src.js'.
-        // Adds a banner displaying the project name, version and date to 'gen_build/<%= pkg.name %>.src.js'.
+        // Concatenates and bundles the JavaScript module files in 'src/js/' into 'gen_build/<%= pkg.name %>.js'.
+        // Adds a banner displaying the project name, version and date to 'gen_build/<%= pkg.name %>.js'.
         concat: 
         {
             options: 
@@ -21,7 +21,7 @@ module.exports = function (grunt)
                 [
                     'src/js/**/*.js'
                 ],
-                dest: 'gen_build/<%= pkg.name %>.src.js'
+                dest: 'gen_build/<%= pkg.name %>.js'
             }
         },
         // Detects errors and potential problems in the JavaScript module and test files.
@@ -34,18 +34,18 @@ module.exports = function (grunt)
         },
         // Remove console statements, debugger and specific blocks of code.
         // Removes blocks of code surrounded by //<validation>...//</validation>
-        // Generates 'gen_build/<%= pkg.name %>.js' from 'gen_build/<%= pkg.name %>.src.js'.
+        // Generates 'gen_build/<%= pkg.name %>.min.js' from 'gen_build/<%= pkg.name %>.js'.
         groundskeeper: 
         {
             compile: 
             {
                 files: 
                 {
-                    'gen_build/<%= pkg.name %>.js': 'gen_build/<%= pkg.name %>.src.js', // 1:1 compile
+                    'gen_build/<%= pkg.name %>.min.js': 'gen_build/<%= pkg.name %>.js', // 1:1 compile
                 }
             }
         },
-        // Minimises the JavaScript source code file 'gen_build/<%= pkg.name %>.src.js' into 'gen_build/<%= pkg.name %>.js'.
+        // Minimises the JavaScript source code file 'gen_build/<%= pkg.name %>.min.js' into 'gen_build/<%= pkg.name %>.min.js'.
         // Adds a banner displaying the project name, version and date to the minimised file.
         // Creates a source map file 'gen_build/<%= pkg.name %>.map' for debugging the minimised code file.
         // Removes DEBUG code from minimised code file.
@@ -70,8 +70,23 @@ module.exports = function (grunt)
             {
                 files: 
                 {
-                    'gen_build/<%= pkg.name %>.js': ['gen_build/<%= pkg.name %>.js']
+                    'gen_build/<%= pkg.name %>.min.js': ['gen_build/<%= pkg.name %>.min.js']
                 }
+            }
+        },
+        // Minify all contents of the css release directory and add a .min.css extension.
+        cssmin: 
+        {
+            target: 
+            {
+                files: [
+                {
+                    expand: true,
+                    cwd: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/css/',
+                    src: ['*.css', '!*.min.css'],
+                    dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/css/',
+                    ext: '.min.css'
+                }]
             }
         },
         // Deletes directories.
@@ -95,23 +110,30 @@ module.exports = function (grunt)
                 files: 
                 [
                     // Copies the JavaScript source file 'gen_build/<%= pkg.name %>.js' and 
-                    // minimised file 'gen_build/<%= pkg.name %>.src.js' to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/js/<%= pkg.name %>-<%= pkg.version %>'.
+                    // minimised file 'gen_build/<%= pkg.name %>.min.js' to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/js/'.
                     {
                         expand: true, 
                         flatten: true, // Flattens results to a single level so directory structure isnt copied.
                         src: 
                         [
                             'gen_build/<%= pkg.name %>.js', 
-                            'gen_build/<%= pkg.name %>.src.js'
+                            'gen_build/<%= pkg.name %>.min.js'
                         ], 
-                        dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/js/<%= pkg.name %>-<%= pkg.version %>/'
+                        dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/js/'
+                    }, 
+                    // Copies the css source file 'src/css/<%= pkg.name %>.css' to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/css/'.
+                    {
+                        expand: true, 
+                        flatten: true, // Flattens results to a single level so directory structure isnt copied.
+                        src: ['src/css/<%= pkg.name %>.css'], 
+                        dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/css/'
                     },
-                    // Copies the JavaScript library files 'lib/', to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/js/'.
+                    // Copies the external JavaScript library files 'lib/', to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/lib/'.
                     {
                         expand: true,
                         cwd: 'lib/', // Makes the src relative to cwd so that the full file path is not copied into release.    
                         src: '**/*',
-                        dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/js/'
+                        dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/lib/'
                     },
                     // Copies the JavaScript API documentation 'gen_doc/', to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/doc/'.
                     {
@@ -119,13 +141,6 @@ module.exports = function (grunt)
                         cwd: 'gen_doc/',
                         src: '**/*',
                         dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/doc/'
-                    },
-                    // default.css
-                    {
-                        expand: true,   
-                        cwd: 'src/', 
-                        src: ['default.css'],
-                        dest: 'gen_release/<%= pkg.name %>-<%= pkg.version %>/',
                     }
                 ]
             },
@@ -194,8 +209,8 @@ module.exports = function (grunt)
             }
         },
         // Browserify bundles up all of the project dependencies into a single JavaScript file.
-        // Generates a bundled file 'gen_build/<%= pkg.name %>.src.js' from the starting point 'src/js/main.js'.
-        // Adds a banner displaying the project name, version and date to 'gen_build/<%= pkg.name %>.src.js'.
+        // Generates a bundled file 'gen_build/<%= pkg.name %>.js' from the starting point 'src/js/main.js'.
+        // Adds a banner displaying the project name, version and date to 'gen_build/<%= pkg.name %>.js'.
         browserify: 
         {
             build: 
@@ -205,19 +220,19 @@ module.exports = function (grunt)
                     banner: '/*! <%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
                     browserifyOptions: 
                     {
-                        // Generates inline source maps as a comment at the bottom of 'gen_build/<%= pkg.name %>.src.js' 
+                        // Generates inline source maps as a comment at the bottom of 'gen_build/<%= pkg.name %>.js' 
                         // to enable debugging of original JavaScript module files.
                         debug: true
                     },
                     transform: [['babelify', {presets: ['react']}]] // Convert jsx to js. 
                 },        
                 src: ['src/js/main.js'],
-                dest: 'gen_build/<%= pkg.name %>.src.js'
+                dest: 'gen_build/<%= pkg.name %>.js'
             }
         },
-        // Processes and copies the demo files 'examples/', to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/examples/'.
-        // Adds a banner to each file displaying the project name, version and date.
-        // Replaces javascript source paths in html files from dev to release.
+        // Processes and copies the demo files 'index.html', to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/index.html'.
+        // Adds a banner displaying the project name, version and date.
+        // Replaces source paths in html files with minimised versions.
         processhtml: 
         {
             options:
@@ -319,6 +334,7 @@ module.exports = function (grunt)
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -351,7 +367,7 @@ module.exports = function (grunt)
 
     // '>grunt publish' 
     // Publish a release version to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/'.
-    grunt.registerTask('publish', ['clean:release', 'doc', 'copy:release', 'processhtml', 'compress', 'open:release']);      
+    grunt.registerTask('publish', ['clean:release', 'doc', 'copy:release', 'cssmin', 'processhtml', 'compress', 'open:release']);      
 
     // '>grunt' 
     // Run this after installation to generate 'gen_build', 'gen_doc', 'gen_release' and 'gen_test_coverage' directories.              
