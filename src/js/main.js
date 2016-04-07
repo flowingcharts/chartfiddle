@@ -1,16 +1,3 @@
-/*var HelloMessage = React.createClass(
-{
-  render: function() 
-  {
-    return <div>Hello {this.props.name}</div>;
-  }
-});
-
-ReactDOM.render(
-  <HelloMessage name="Jonathan Clare" />,
-  document.getElementById('container')
-);*/
-
 /*
 var NavigationItem = React.createClass({
     onClick: function() {
@@ -278,6 +265,9 @@ ReactDOM.render(
 
 */
 
+
+var $ = require('jQuery');
+
 var controls =
 [
     {id:'viewportMargin', name:'Viewport Margin', description:'Margin around the viewport edge that the tip isnt allowed to overlap', value: 10, type:'integer'},
@@ -303,28 +293,19 @@ var controls =
     {id:'snapDistance', name:'Snap Distance', description:'The distance away from a given xy position at which the tip will snap to a point', value: 5, type:'integer'}
 ];
 
-// Simple pure-React component so we don't have to remember
-// Bootstrap's classes
-var BootstrapButton = React.createClass({
-  render: function() {
-    return (
-      <a {...this.props}
-        href="javascript:;"
-        role="button"
-        className={(this.props.className || '') + ' btn'} />
-    );
-  }
-});
-
 var CheckboxControl = React.createClass(
 {  
     render : function() 
     {
         return (
-            <div className="checkbox" title={this.props.tip}>
-                <label>
-                    <input type="checkbox" id={this.props.id} checked={this.props.value} onChange={this.props.onChange} /> {this.props.label}
-                </label>
+            <div className="form-group" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content={this.props.tip}>
+                <div className={'checkbox col-sm-offset-' + this.props.col1 + ' col-sm-' + this.props.col2}>
+                    <div className="checkbox">
+                        <label>
+                            <input type="checkbox" id={this.props.id} checked={this.props.value} onChange={this.props.onChange} /> {this.props.label}
+                        </label>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -332,7 +313,7 @@ var CheckboxControl = React.createClass(
 
 var SelectControl = React.createClass(
 {  
-    render : function() 
+    render : function () 
     {
         var options = [];
         for (var i = 0; i < this.props.options.length; i++)  
@@ -341,20 +322,46 @@ var SelectControl = React.createClass(
             options.push(<option key={option} value={option}>{option}</option>);
         }
 
-        return (<select className="form-control" id={this.props.id} value={this.props.value} onChange={this.props.onChange}>{options}</select>);
+        return (
+            <div className="form-group" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content={this.props.tip}>
+                <label htmlFor={this.props.id} className={'control-label col-sm-' + this.props.col1}>
+                    <i className="fa fa-question-circle"></i> {this.props.label}
+                </label>
+                <div className={'col-sm-' + this.props.col2} >
+                    <select className="form-control" id={this.props.id} value={this.props.value} onChange={this.props.onChange}>{options}</select>
+                </div>
+            </div>
+        );
     }
 });
 
 var TextControl = React.createClass(
 {  
-    render : function() 
-    {
-        return (<input type="text" className="form-control" id={this.props.id} value={this.props.value} onChange={this.props.onChange} />);
+    render : function () 
+    { 
+        return (
+            <div className="form-group" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content={this.props.tip}>
+                <label htmlFor={this.props.id} className={'control-label col-sm-' + this.props.col1}>
+                    <span style={{cursor: 'pointer'}}><i className="fa fa-question-circle"></i></span> {this.props.label}
+                </label>
+                <div className={'col-sm-' + this.props.col2}>
+                    <input type="text" className="form-control" id={this.props.id} value={this.props.value} onChange={this.props.onChange} />
+                </div>
+            </div>
+        );
     }
 });
 
 var FormControl = React.createClass(
 {  
+    getDefaultProps : function () 
+    {
+        return {
+            col1 : '2',
+            col2 : '10'
+        };
+    },
+
     getInitialState : function () 
     {
         return {value: this.props.initialValue};
@@ -362,46 +369,40 @@ var FormControl = React.createClass(
 
     handleChange : function (event) 
     {
+        //var newValue = event.target.value ? event.target.value : event.target.checked;
         this.setState({value: event.target.value});
         if (this.props.onUserInput) this.props.onUserInput(this.props.id, event.target.value);
     },
 
-    render : function() 
+    render : function () 
     {
         var control;
-        if (this.props.options !== undefined)  
-        {
-            control =   <div className="form-group">
-                            <label htmlFor={this.props.id} className="col-sm-2 control-label" ref="label" title={this.props.tip}>{this.props.label}</label>
-                            <div className="col-sm-10">
-                                <SelectControl onChange={this.handleChange} id={this.props.id} value={this.state.value} options={this.props.options} />
-                            </div>;
-                        </div>;
-        }
-        else if (this.props.type === 'boolean')  
-        {
-            control =   <div className="form-group">
-                            <div className="col-sm-offset-2 col-sm-10">
-                                <CheckboxControl onChange={this.handleChange} id={this.props.id} value={this.state.value} label={this.props.label} tip={this.props.tip}  />
-                            </div>
-                        </div>;
-        }
-        else  
-        {
-            control =   <div className="form-group">
-                            <label htmlFor={this.props.id} className="col-sm-2 control-label" ref="label" title={this.props.tip}>{this.props.label}</label>
-                            <div className="col-sm-10">
-                                <TextControl onChange={this.handleChange} id={this.props.id} value={this.state.value} />
-                            </div>;
-                        </div>;
-        }
-
+        if (this.props.options !== undefined)   control = <SelectControl {...this.props} onChange={this.handleChange} value={this.state.value} />
+        else if (this.props.type === 'boolean') control = <CheckboxControl {...this.props} onChange={this.handleChange} value={this.state.value} />
+        else                                    control = <TextControl {...this.props} onChange={this.handleChange} value={this.state.value} />
         return (control);
     }
 });
 
 var JsonForm = React.createClass(
 {
+    componentDidMount : function () 
+    {
+        console.log("componentDidMount")
+        this.attachPopover();
+    },
+
+    componentDidUpdate : function () 
+    {
+        console.log("componentDidUpdate")
+        this.attachPopover();
+    },
+
+    attachPopover : function () 
+    {
+        $('[data-toggle="popover"]').popover()
+    },
+
     updateJson : function (id, value)
     {
         for (var i = 0; i < this.props.controls.length; i++)  
@@ -410,7 +411,6 @@ var JsonForm = React.createClass(
             if (ctrl.id === id)
             {
                 ctrl.value = value;
-                console.log(ctrl);
                 break;
             }
         }
@@ -427,11 +427,11 @@ var JsonForm = React.createClass(
         for (var i = 0; i < this.props.controls.length; i++)  
         {
             var ctrl = this.props.controls[i];
-            rows.push(<FormControl key={ctrl.id} id={ctrl.id} label={ctrl.name} tip={ctrl.description} initialValue={ctrl.value} onUserInput={this.handleUserInput} type={ctrl.type} options={ctrl.choices} />);
+            rows.push(<FormControl col1={this.props.col1} col2={this.props.col2} key={ctrl.id} id={ctrl.id} label={ctrl.name} tip={ctrl.description} initialValue={ctrl.value} onUserInput={this.handleUserInput} type={ctrl.type} options={ctrl.choices} />);
         }
 
         return (<form className="form-horizontal">{rows}</form>);
     }
 });
 
-ReactDOM.render(<JsonForm controls={controls} labelCol="2" />, document.getElementById('container'));
+ReactDOM.render(<JsonForm controls={controls} col1="5" col2="7" />, document.getElementById('container'));
