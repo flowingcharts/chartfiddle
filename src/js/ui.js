@@ -152,22 +152,16 @@ var AccordionPanel = React.createClass(
 {
     render : function () 
     {
-        var headingId    = 'heading-'+this.props.id;
-        var panelId      = 'panel-'+this.props.id;
-        var panelIdLink  = '#'+panelId;
-        var parentIdLink = '#'+this.props.parentId;
+        var headingId = 'heading-'+this.props.id;
+        var panelId   = 'panel-'+this.props.id;
 
         return (
-            <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id={headingId}>
-                    <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent={parentIdLink} href={panelIdLink} aria-expanded={this.props.expanded} aria-controls={panelId}>
-                            {this.props.heading}
-                        </a>
-                    </h4>
+            <div className="panel panel-default">
+                <div className="panel-heading" role="tab" id={headingId} data-toggle="collapse" data-parent={'#'+this.props.parentId} href={'#'+panelId} aria-expanded={this.props.expanded ? this.props.expanded : false} aria-controls={panelId}>
+                    <h4 className="panel-title">{this.props.heading}</h4>
                 </div>
-                <div id={panelId} class="panel-collapse collapse in" role="tabpanel" aria-labelledby={headingId}>
-                    <div class="panel-body">
+                <div id={panelId} className={this.props.expanded ? 'panel-collapse collapse in' : 'panel-collapse collapse'} role="tabpanel" aria-labelledby={headingId}>
+                    <div className="panel-body">
                         {this.props.children}
                     </div>
                 </div>
@@ -180,7 +174,7 @@ var Accordion = React.createClass(
 {
     render : function () 
     {
-        return (<div class="panel-group" id={this.props.id} role="tablist" aria-multiselectable="true">{this.props.children}</div>);
+        return (<div className="panel-group" id={this.props.id} role="tablist" aria-multiselectable="true">{this.props.children}</div>);
     }
 });
 
@@ -191,5 +185,7 @@ module.exports =
     SelectControl   : SelectControl,
     TextControl     : TextControl,
     FormControl     : FormControl,
-    Panel           : Panel
+    Panel           : Panel,
+    AccordionPanel  : AccordionPanel,
+    Accordion       : Accordion
 };

@@ -1,0 +1,72 @@
+#cf-sidebar 
+{     
+    position: absolute;
+    top: 51px;
+    left: 0;
+    bottom: 0px;
+    width: 400px;   
+    border-right: solid 1px #e7e7e7;
+    background: #fff;
+    overflow: auto;
+}
+#cf-chart 
+{
+    position: absolute;
+    top: 51px;
+    left: 400px;
+    right: 0px;
+    bottom: 0px;
+    background: #fff;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 800px) 
+{
+    #cf-main 
+    {
+
+    }
+}
+
+/* Bootstrap Overrides */
+.panel 
+{
+    border: 0px; 
+    border-radius: 0px;
+    -webkit-box-shadow: 0 0px 0px rgba(0,0,0,0.05);
+    box-shadow: 0 0px 0px rgba(0,0,0,0.05);
+}
+.panel-group>.panel 
+{
+    border-bottom: 1px solid #eeeeee;
+}
+.panel-default>.panel-heading 
+{
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #fff; 
+}
+.panel-default>.panel-heading+.panel-collapse .panel-body 
+{
+    border-top-color: #fff;
+}
+.panel-group .panel+.panel 
+{
+    margin-top: 0px;
+}
+.form-control
+{
+    border-radius: 0px;
+    -webkit-box-shadow: 0 0px 0px rgba(0,0,0,0.05);
+    box-shadow: 0 0px 0px rgba(0,0,0,0.05);
+}
+.panel-body
+{
+    padding: 0px 15px 10px 15px;
+}
+label 
+{
+    font-weight: normal;
+}
+
+
