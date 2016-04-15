@@ -3,7 +3,7 @@
   "name": "chartfiddle",
   "description": "An online playground for your JavaScript Charting",
   "version": "0.1.0",
-  "homepage": "http://www.flowingcharts.com/",
+  "homepage": "http://www.chartfiddle.com/",
   "repository": {
     "type": "git",
     "url": "git://github.com/flowingcharts/chartfiddle.git"

@@ -16,7 +16,7 @@ var jsonChart =
                 properties:
                 [
                     {id:'fontFamily', label:'Family', value:'arial', type:'string', options: ['Arial', 'Helvetica', 'sans-serif']},
-                    {id:'fontSize', label:'Size', value: 12, type:'integer'},
+                    {id:'fontSize', label:'Size', value: 12, min: 0, max:25, type:'integer'},
                     {id:'fontColor', label:'Color', value:'#666666', type:'color'}
                 ]
             },
@@ -36,7 +36,7 @@ var jsonChart =
         groups:
         [
             {
-                id:'position', label:'',
+                id:'position', label:' ',
                 properties:
                 [
                     {id:'position', label:'Position', description:'The preferred position of the data tip relative to the x and y coords - one of top, bottom, left or right', value:'top', type:'string', options: ['top', 'bottom', 'left', 'right']}
@@ -76,7 +76,7 @@ var jsonChart =
                 properties:
                 [
                     {id:'followMouse', label:'Follow Mouse', description:'Should the tip follow the mouse', value: false, type:'boolean'},
-                    {id:'useAnimation', label:'Animate Tip', description:'Should the tip movement be animated', value: true, type:'boolean'},
+                    {id:'useAnimation', label:'Animation', description:'Enable or disable animation of the tip', value: true, type:'boolean'},
                 ]
             }
         ]
@@ -117,6 +117,9 @@ var JsonControls = React.createClass(
                                         initialValue  = {ctrl.value} 
                                         onUserInput   = {this.handleUserInput} 
                                         type          = {ctrl.type} 
+                                        min           = {ctrl.min} 
+                                        max           = {ctrl.max} 
+                                        step          = {ctrl.step} 
                                         options       = {ctrl.options} />);
         }
         return (<form>{ctrls}</form>);

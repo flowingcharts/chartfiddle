@@ -119,6 +119,40 @@ var TextControl = React.createClass(
     }
 });
 
+var RangeControl = React.createClass(
+{  
+    getInitialState : function () 
+    {
+        return {value: this.props.initialValue};
+    },
+
+    handleChange : function (event) 
+    {
+        this.setState({value: event.target.value});
+        if (this.props.onUserInput) this.props.onUserInput(this.props.id, event.target.value);
+    },
+
+    render : function () 
+    { 
+        return (
+            <div className="form-group">
+                <label htmlFor={this.props.id}>{this.props.label}</label> <HelpIcon content={this.props.description} /> 
+                <input type="range" id={this.props.id} value={this.state.value} min={this.props.min} max={this.props.max} step={this.props.step ? this.props.step : 1} onChange={this.handleChange} />
+            </div>
+        );
+    }
+});
+
+
+var i = document.createElement('input');
+function inputTypeExists (type)
+{
+    i.setAttribute('type', type);
+    if (i.type !== 'text')  return true;
+    else                    return false
+}
+
+
 var FormControl = React.createClass(
 {  
     render : function () 
@@ -126,6 +160,11 @@ var FormControl = React.createClass(
         var control;
         if (this.props.options !== undefined)   control = <SelectControl   {...this.props} />
         else if (this.props.type === 'boolean') control = <CheckboxControl {...this.props} />
+        else if (this.props.min !== undefined)  
+        {
+            if (inputTypeExists('range'))       control = <RangeControl    {...this.props} />
+            else                                control = <TextControl     {...this.props} />
+        }
         else                                    control = <TextControl     {...this.props} />
         return (control);
     }

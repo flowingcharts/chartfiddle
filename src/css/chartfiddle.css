@@ -48,7 +48,7 @@
 }
 .panel-default>.panel-heading+.panel-collapse .panel-body 
 {
-    border-top-color: #fff;
+    border-top-width: 0;
 }
 .panel-group .panel+.panel 
 {
@@ -68,5 +68,7 @@ label
 {
     font-weight: normal;
 }
-
-
+.navbar-default .navbar-nav > li:hover 
+{
+    background: #e7e7e7;
+}

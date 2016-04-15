@@ -27,10 +27,10 @@ module.exports = function (grunt)
         // Detects errors and potential problems in the JavaScript module and test files.
         // 'gruntfile.js' This file.
         // 'src/js/**/*.js' The JavaScript module files.
-        // 'test/js/**/*.js' The JavaScript test files.
+        // 'test/**/*.js' The JavaScript test files.
         jshint: 
         {
-            all: ['gruntfile.js', 'src/js/**/*.js', 'test/js/**/*.js']
+            all: ['gruntfile.js', 'src/js/**/*.js', 'test/**/*.js']
         },
         // Remove console statements, debugger and specific blocks of code.
         // Removes blocks of code surrounded by //<validation>...//</validation>
@@ -144,41 +144,41 @@ module.exports = function (grunt)
                     }
                 ]
             },
-            // Copies the JavaScript test files 'test/js/' to 'gen_test_coverage/test/js/' for testing coverage.
+            // Copies the JavaScript test files 'test/' to 'gen_test_coverage/test/' for testing coverage.
             coverage: 
             {
                 files: 
                 [
                     {
                         expand: true,
-                        cwd: 'test/js/',
+                        cwd: 'test/',
                         src: '**/*',
-                        dest: 'gen_test_coverage/test/js/'
+                        dest: 'gen_test_coverage/test/'
                     }
                 ]
             }
         },
         // Used for test coverage alongside mochaTest.
-        // Copies the JavaScript module files 'src/js/' to 'gen_test_coverage/src/js/' for testing coverage.
+        // Copies the JavaScript module files 'src/js/' to 'gen_test_coverage/src/' for testing coverage.
         blanket: 
         {
             coverage: 
             {
                 src: ['src/js/'],
-                dest: 'gen_test_coverage/src/js/'
+                dest: 'gen_test_coverage/src/'
             }
         },   
         // Unit testing.
         mochaTest: 
         {
-            // Runs unit tests 'gen_test_coverage/test/js/' on the JavaScript module files in 'gen_test_coverage/src/js/'.
+            // Runs unit tests 'gen_test_coverage/test/' on the JavaScript module files in 'gen_test_coverage/src/'.
             test: 
             {
                 options: 
                 {
                     reporter: 'spec',
                 },
-                src: ['gen_test_coverage/test/js/**/*.js']
+                src: ['gen_test_coverage/test/**/*.js']
             },
             // Creates a test coverage file 'gen_test_coverage/coverage.html'.
             // This file helps highlight areas where more testing is required.
@@ -190,7 +190,7 @@ module.exports = function (grunt)
                     quiet: true,
                     captureFile: 'gen_test_coverage/coverage.html'
                 },
-                src: ['gen_test_coverage/test/js/**/*.js']
+                src: ['gen_test_coverage/test/**/*.js']
             }
         },
         // Generates documentation for the JavaScript module files 'src/js/**/*.js' in 'gen_doc'.
@@ -261,7 +261,7 @@ module.exports = function (grunt)
         {
             all: 
             {
-                src: ['gruntfile.js', 'src/js/**/*.js', 'test/js/**/*.js'],
+                src: ['gruntfile.js', 'src/js/**/*.js', 'test/**/*.js'],
                 options: 
                 {
                     verbose: false,
@@ -363,7 +363,7 @@ module.exports = function (grunt)
 
     // '>grunt test' 
     // Carry out unit testing on the JavaScript module files and generate a test coverage file at 'gen_test_coverage/coverage.html'.
-    //grunt.registerTask('test', ['clean:coverage', 'copy:coverage', 'blanket:coverage', 'mochaTest']);
+    grunt.registerTask('test', ['clean:coverage', 'copy:coverage', 'blanket:coverage', 'mochaTest']);
 
     // '>grunt publish' 
     // Publish a release version to 'gen_release/<%= pkg.name %>-<%= pkg.version %>/'.
